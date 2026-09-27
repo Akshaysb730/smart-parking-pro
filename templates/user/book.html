@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Book Parking - {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="booking-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="booking-card">
+                    <div class="booking-header">
+                        <h3><i class="fas fa-calendar-check me-2"></i>Book Parking Slot</h3>
+                        <p class="text-muted mb-0">Reserve your parking space in advance</p>
+                    </div>
+
+                    <form method="POST" action="{{ url_for('book_parking') }}">
+                        <!-- Vehicle Selection -->
+                        <div class="mb-4">
+                            <label class="form-label">Select Vehicle</label>
+                            <div class="vehicle-grid">
+                                {% for vehicle in vehicles %}
+                                <div class="vehicle-option">
+                                    <input type="radio" name="vehicle_id" id="vehicle_{{ vehicle.id }}" value="{{ vehicle.id }}" required>
+                                    <label for="vehicle_{{ vehicle.id }}">
+                                        <i class="fas fa-car"></i>
+                                        <span class="plate">{{ vehicle.license_plate }}</span>
+                                        <span class="model">{{ vehicle.model }}</span>
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Slot Type -->
+                        <div class="mb-4">
+                            <label class="form-label">Parking Category</label>
+                            <div class="slot-type-grid">
+                                {% for type, config in slot_types.items() %}
+                                <div class="slot-type-option">
+                                    <input type="radio" name="slot_type" id="type_{{ type }}" value="{{ type }}" required>
+                                    <label for="type_{{ type }}">
+                                        <span class="type-name">{{ type.title() }}</span>
+                                        <span class="type-price">₹{{ config.price_per_hour }}/hr</span>
+                                        <span class="type-available {{ 'text-success' if available_counts[type] > 0 else 'text-danger' }}">
+                                            {{ available_counts[type] }} available
+                                        </span>
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Date & Time -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Start Time</label>
+                                <input type="datetime-local" name="start_time" class="form-control" required
+                                       min="{{ now().strftime('%Y-%m-%dT%H:%M') }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Duration</label>
+                                <select name="duration_hours" class="form-select" required>
+                                    <option value="1">1 Hour</option>
+                                    <option value="2">2 Hours</option>
+                                    <option value="3">3 Hours</option>
+                                    <option value="4">4 Hours</option>
+                                    <option value="8">8 Hours</option>
+                                    <option value="12">12 Hours</option>
+                                    <option value="24">24 Hours</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Price Preview -->
+                        <div class="price-preview mb-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Estimated Cost:</span>
+                                <span class="price" id="estimatedPrice">Select options to see price</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 py-3">
+                            <i class="fas fa-arrow-right me-2"></i>Proceed to Payment
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const slotTypes = JSON.parse('{{ slot_types | tojson | safe }}');
+
+document.querySelectorAll('input[name="slot_type"]').forEach(function(radio) {
+    radio.addEventListener('change', updatePrice);
+});
+
+document.querySelector('select[name="duration_hours"]').addEventListener('change', updatePrice);
+
+function updatePrice() {
+    const type = document.querySelector('input[name="slot_type"]:checked');
+    const duration = document.querySelector('select[name="duration_hours"]').value;
+    
+    if (type && duration) {
+        const pricePerHour = slotTypes[type.value].price_per_hour;
+        const total = pricePerHour * parseInt(duration);
+        document.getElementById('estimatedPrice').textContent = '₹' + total;
+    }
+}
+</script>
+{% endblock %}

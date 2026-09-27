@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Vehicle - {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="vehicle-form-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="form-card">
+                    <div class="form-header">
+                        <h3><i class="fas fa-car me-2"></i>Add New Vehicle</h3>
+                        <p class="text-muted">Register your vehicle for parking</p>
+                    </div>
+
+                    <form method="POST" action="{{ url_for('add_vehicle') }}">
+                        <div class="mb-3">
+                            <label class="form-label">License Plate Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                <input type="text" name="license_plate" class="form-control text-uppercase" 
+                                       placeholder="e.g., MH01AB1234" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Vehicle Type</label>
+                            <div class="vehicle-type-selector">
+                                <div class="type-option">
+                                    <input type="radio" name="vehicle_type" id="type_car" value="car" checked>
+                                    <label for="type_car">
+                                        <i class="fas fa-car"></i>
+                                        <span>Car</span>
+                                    </label>
+                                </div>
+                                <div class="type-option">
+                                    <input type="radio" name="vehicle_type" id="type_bike" value="bike">
+                                    <label for="type_bike">
+                                        <i class="fas fa-motorcycle"></i>
+                                        <span>Bike</span>
+                                    </label>
+                                </div>
+                                <div class="type-option">
+                                    <input type="radio" name="vehicle_type" id="type_ev" value="ev">
+                                    <label for="type_ev">
+                                        <i class="fas fa-bolt"></i>
+                                        <span>EV</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Vehicle Model</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-car-side"></i></span>
+                                <input type="text" name="model" class="form-control" 
+                                       placeholder="e.g., Honda City">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Color</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-palette"></i></span>
+                                <input type="text" name="color" class="form-control" 
+                                       placeholder="e.g., Silver">
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary py-2">
+                                <i class="fas fa-plus me-2"></i>Add Vehicle
+                            </button>
+                            <a href="{{ url_for('my_vehicles') }}" class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

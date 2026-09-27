@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome - {{ app_name }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center min-vh-100">
+            <div class="col-lg-6">
+                <span class="hero-eyebrow"><i class="fas fa-bolt me-1"></i> Smart Campus Parking</span>
+                <h1 class="display-4 fw-bold mb-4 hero-title">Smart Parking <span class="text-gradient">Management</span> for Campuses</h1>
+                <p class="lead mb-4">Automated slot allocation, real-time availability, and seamless parking experience for faculty, staff, students, and visitors.</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{{ url_for('register') }}" class="btn btn-gradient btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Get Started
+                    </a>
+                    <a href="{{ url_for('login') }}" class="btn btn-glass btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                </div>
+                <div class="hero-trust mt-5">
+                    <div class="trust-avatars">
+                        <span><i class="fas fa-user"></i></span>
+                        <span><i class="fas fa-user"></i></span>
+                        <span><i class="fas fa-user"></i></span>
+                        <span><i class="fas fa-user"></i></span>
+                    </div>
+                    <div class="trust-text">
+                        <strong>Trusted</strong> by faculty, staff &amp; students across campus
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image position-relative">
+                    <div class="parking-visual">
+                        <div class="pv-header">
+                            <span class="pv-dot red"></span>
+                            <span class="pv-dot yellow"></span>
+                            <span class="pv-dot green"></span>
+                            <span class="pv-title">Live Availability</span>
+                        </div>
+                        <div class="slot-grid">
+                            {% for i in range(12) %}
+                            <div class="slot-item {{ 'occupied' if i < 5 else 'available' }}">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="pv-legend">
+                            <span><i class="dot available"></i> Available</span>
+                            <span><i class="dot occupied"></i> Occupied</span>
+                        </div>
+                    </div>
+                    <div class="floating-card float-1">
+                        <div class="fc-icon"><i class="fas fa-check"></i></div>
+                        <div><small>Slot Booked</small><strong>FA-07</strong></div>
+                    </div>
+                    <div class="floating-card float-2">
+                        <div class="fc-icon green"><i class="fas fa-qrcode"></i></div>
+                        <div><small>Entry</small><strong>QR Verified</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section py-5">
+    <div class="container">
+        <span class="section-eyebrow">Why Choose Us</span>
+        <h2 class="text-center mb-2 section-title">Key Features</h2>
+        <p class="text-center section-subtitle mb-5">Everything you need for a modern, friction-free parking experience.</p>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h4>Pre-Booking</h4>
+                    <p>Book your parking slot in advance with filters for vehicle type, duration, and user category.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <h4>QR Code Entry</h4>
+                    <p>Seamless gate entry with QR code scanning and automatic license plate logging.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <h4>Real-time Maps</h4>
+                    <p>Live parking availability maps with navigation to your assigned spot.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4>Security Dashboard</h4>
+                    <p>Monitor occupancy, track violations, and manage access control.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4>Analytics</h4>
+                    <p>Comprehensive reports on usage patterns, revenue, and optimization suggestions.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h4>Easy Payments</h4>
+                    <p>Integrated payment system with multiple options and monthly pass management.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section py-5">
+    <div class="container">
+        <div class="stats-panel">
+        <div class="row text-center g-4">
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <h2 class="display-4 fw-bold">60-80%</h2>
+                    <p>Reduction in Search Time</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <h2 class="display-4 fw-bold">100%</h2>
+                    <p>Digital Records</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <h2 class="display-4 fw-bold">24/7</h2>
+                    <p>Automated Access</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <h2 class="display-4 fw-bold">Zero</h2>
+                    <p>Paper Waste</p>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

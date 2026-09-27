@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}My Vehicles - {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="vehicles-section">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h2><i class="fas fa-car me-2"></i>My Vehicles</h2>
+                <p class="text-muted">Manage your registered vehicles</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{{ url_for('add_vehicle') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Add Vehicle
+                </a>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            {% for vehicle in vehicles %}
+            <div class="col-md-6 col-lg-4">
+                <div class="vehicle-card">
+                    <div class="vehicle-header">
+                        <div class="vehicle-type-icon">
+                            <i class="fas fa-{{ 'car' if vehicle.vehicle_type == 'car' else 'motorcycle' if vehicle.vehicle_type == 'bike' else 'bolt' }}"></i>
+                        </div>
+                        <span class="badge bg-{{ 'success' if vehicle.is_active else 'secondary' }}">
+                            {{ 'Active' if vehicle.is_active else 'Inactive' }}
+                        </span>
+                    </div>
+                    <div class="vehicle-body">
+                        <h4 class="license-plate">{{ vehicle.license_plate }}</h4>
+                        <p class="vehicle-model">{{ vehicle.model }}</p>
+                        <div class="vehicle-details">
+                            <span><i class="fas fa-palette me-1"></i>{{ vehicle.color }}</span>
+                            <span><i class="fas fa-tag me-1"></i>{{ vehicle.vehicle_type.title() }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12">
+                <div class="empty-state-card text-center py-5">
+                    <i class="fas fa-car"></i>
+                    <h4>No Vehicles Added</h4>
+                    <p class="text-muted">Add your first vehicle to start booking parking slots</p>
+                    <a href="{{ url_for('add_vehicle') }}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Add Vehicle
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

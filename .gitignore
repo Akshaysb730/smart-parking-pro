@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Flask / instance data
+instance/*.db
+instance/*.sqlite
+instance/*.sqlite3
+
+# Uploads (user-generated content)
+uploads/*
+!uploads/.gitkeep
+uploads/qr_codes/*
+uploads/violations/*
+
+# Environment / secrets
+.env
+*.env
+secret_key.txt
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

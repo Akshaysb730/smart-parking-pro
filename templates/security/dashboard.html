@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+
+{% block title %}Security Dashboard - {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="security-dashboard">
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="security-header">
+                    <h2><i class="fas fa-shield-alt me-2"></i>Security Control Center</h2>
+                    <p class="text-muted mb-0">Monitor entries, exits, and violations</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Today's Stats -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="stat-card security">
+                    <div class="stat-icon bg-success">
+                        <i class="fas fa-sign-in-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>{{ entries_today }}</h3>
+                        <p>Entries Today</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card security">
+                    <div class="stat-icon bg-info">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>{{ exits_today }}</h3>
+                        <p>Exits Today</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card security">
+                    <div class="stat-icon bg-danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>{{ pending_violations|length }}</h3>
+                        <p>Pending Violations</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QR Scanner Section -->
+        <div class="row mb-4">
+            <div class="col-lg-6">
+                <div class="content-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-qrcode me-2"></i>QR Code Scanner</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="scanner-section">
+                            <div class="mb-3">
+                                <label class="form-label">Enter Booking Code</label>
+                                <div class="input-group">
+                                    <input type="text" id="bookingCode" class="form-control form-control-lg" 
+                                           placeholder="e.g., SPABC12345">
+                                    <button class="btn btn-primary" onclick="verifyBooking()">
+                                        <i class="fas fa-search me-2"></i>Verify
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="verificationResult"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="content-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-car me-2"></i>Currently Parked</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="parked-list">
+                            {% for booking in active_bookings[:5] %}
+                            <div class="parked-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>{{ booking.vehicle.license_plate }}</strong>
+                                        <small class="text-muted d-block">{{ booking.parking_slot.slot_number }}</small>
+                                    </div>
+                                    <span class="badge bg-success">Active</span>
+                                </div>
+                            </div>
+                            {% else %}
+                            <p class="text-muted text-center">No active parkings</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Violations & Logs -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="content-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-exclamation-circle me-2"></i>Pending Violations</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if pending_violations %}
+                        <div class="violation-list">
+                            {% for violation in pending_violations %}
+                            <div class="violation-item">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <strong>{{ violation.license_plate }}</strong>
+                                        <small class="text-muted d-block">{{ violation.violation_type }}</small>
+                                    </div>
+                                    <span class="badge bg-warning">₹{{ violation.fine_amount }}</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="text-muted text-center">No pending violations</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="content-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-history me-2"></i>Recent Activity</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="activity-list">
+                            {% for log in recent_logs %}
+                            <div class="activity-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="fas fa-{{ 'sign-in-alt text-success' if log.action == 'entry' else 'sign-out-alt text-info' }} me-2"></i>
+                                        <strong>{{ log.license_plate }}</strong>
+                                    </div>
+                                    <small class="text-muted">{{ log.timestamp.strftime('%H:%M') }}</small>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function verifyBooking() {
+    const code = document.getElementById('bookingCode').value.trim();
+    if (!code) {
+        alert('Please enter a booking code');
+        return;
+    }
+    
+    fetch('/api/booking/' + code)
+        .then(response => response.json())
+        .then(data => {
+            const resultDiv = document.getElementById('verificationResult');
+            if (data.error) {
+                resultDiv.innerHTML = '<div class="alert alert-danger">' + data.error + '</div>';
+            } else {
+                const actionButtons = data.status === 'pending' 
+                    ? '<button class="btn btn-success me-2" onclick="processEntry(\'' + code + '\')">Mark Entry</button>'
+                    : data.status === 'active'
+                    ? '<button class="btn btn-info" onclick="processExit(\'' + code + '\')">Mark Exit</button>'
+                    : '';
+                
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <h6>Booking Verified</h6>
+                        <p class="mb-1"><strong>User:</strong> ${data.user}</p>
+                        <p class="mb-1"><strong>Vehicle:</strong> ${data.vehicle}</p>
+                        <p class="mb-1"><strong>Slot:</strong> ${data.slot || 'TBA'}</p>
+                        <p class="mb-2"><strong>Status:</strong> ${data.status.toUpperCase()}</p>
+                        ${actionButtons}
+                    </div>
+                `;
+            }
+        });
+}
+
+function processEntry(code) {
+    fetch('/security/verify', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({booking_code: code, action: 'entry'})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Entry recorded successfully');
+            location.reload();
+        } else {
+            alert(data.error || 'Error processing entry');
+        }
+    });
+}
+
+function processExit(code) {
+    fetch('/security/verify', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({booking_code: code, action: 'exit'})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Exit recorded successfully');
+            location.reload();
+        } else {
+            alert(data.error || 'Error processing exit');
+        }
+    });
+}
+</script>
+{% endblock %}
