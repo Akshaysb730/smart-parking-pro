@@ -1,5 +1,15 @@
 # 🅿️ Smart Parking Pro
 
+<p align="center">
+  <img alt="Python" src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white">
+  <img alt="Flask" src="https://img.shields.io/badge/Flask-3.0-000000?style=flat-square&logo=flask&logoColor=white">
+  <img alt="SQLAlchemy" src="https://img.shields.io/badge/SQLAlchemy-3.1-D71F3B?style=flat-square&logo=sqlalchemy&logoColor=white">
+  <img alt="SQLite" src="https://img.shields.io/badge/SQLite-3-003B57?style=flat-square&logo=sqlite&logoColor=white">
+  <img alt="Bootstrap" src="https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat-square&logo=bootstrap&logoColor=white">
+  <img alt="License" src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square">
+  <img alt="Status" src="https://img.shields.io/badge/status-active-brightgreen?style=flat-square">
+</p>
+
 A premium **smart parking management system** for educational institutions (campuses). It digitises the entire parking workflow — from pre-booking a slot to QR-code gate entry, real-time availability, violation tracking, payments, and analytics — replacing paper logs and manual search with a fast, automated web app.
 
 > Built for **SIH25414 — Smart Parking Slot Management**.
@@ -158,6 +168,20 @@ The interface uses a premium design system: glassmorphic navigation, gradient br
 
 ---
 
+## 📸 Screenshots
+
+| Landing Page | Dashboard |
+|:--:|:--:|
+| ![Landing](static/images/screenshots/landing.png) | ![Dashboard](static/images/screenshots/dashboard.png) |
+
+| Login | Register |
+|:--:|:--:|
+| ![Login](static/images/screenshots/login.png) | ![Register](static/images/screenshots/register.png) |
+
+> The images above are branded **preview placeholders**. To replace them with real captures, run the app (`python app.py`), open http://127.0.0.1:5000, screenshot each page, and overwrite the PNGs in [`static/images/screenshots/`](static/images/screenshots/).
+
+---
+
 ## 🔒 Configuration & Security
 
 Environment variables (optional, sensible defaults are provided):
@@ -188,7 +212,9 @@ Contributions are welcome! Fork the repo, create a feature branch, and open a pu
 
 ## 📄 License
 
-This project is built for the **SIH25414** Smart Parking Slot Management challenge. All rights reserved by the author.
+This project is licensed under the [MIT License](LICENSE) — see the [LICENSE](LICENSE) file for details.
+
+Built for the **SIH25414** Smart Parking Slot Management challenge.
 
 ---
 
