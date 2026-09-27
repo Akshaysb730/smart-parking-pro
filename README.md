@@ -206,7 +206,11 @@ The `.gitignore` keeps the database, `__pycache__`, and `uploads/` (QR codes & v
 
 ## 🤝 Contributing
 
-Contributions are welcome! Fork the repo, create a feature branch, and open a pull request.
+Contributions are welcome! Please read the [Contributing Guide](CONTRIBUTING.md) before opening a pull request. Notable changes are tracked in the [CHANGELOG](CHANGELOG.md).
+
+## 🔐 Security
+
+See the [Security Policy](SECURITY.md) for how to report vulnerabilities and hardening guidance for production deployments.
 
 ---
 
